@@ -7,6 +7,14 @@ class Dungeon
   def initialize
     @rooms = {}
     @moves = 0
+
+    add_room(:large_cave, "Large Cave", "You find yourself in a large cavernous room.",
+            { east: :small_cave, west: :dragons_den, north: :hallway })
+    add_room(:small_cave, "Small Cave", "It appears to be a rather small cave.", { west: :large_cave })
+    add_room(:dragons_den, "Dragon's Den", "Hmmmm... It smells strongly of rotting meat in here.
+              Well, it's nothing to be worried about I'm sure.", { east: :large_cave })
+    add_room(:hallway, "Long Hallway", "I don't really see anything. I wonder where this leads.", { east: :far_room, south: :large_cave })
+    add_room(:far_room, "Far Room", "It's kind of dark in here.", { west: :hallway })
   end
 
   def add_room(reference, name, description, connections)
@@ -34,7 +42,7 @@ class Dungeon
 
   def play
     while true
-      if @moves == 5
+      if @moves == 7
         open_treasure_room
       end
       show_current_description
@@ -43,7 +51,7 @@ class Dungeon
       gets
       while true
         puts "\nWhich direction would you like to go?"
-        choice = gets.chomp.to_sym
+        choice = gets.chomp.downcase.to_sym
         unless find_room_in_dungeon(@player.location).connections.keys.include?(choice)
           puts "That's not really an option right now. Best try something else!\n"
           gets
@@ -88,7 +96,7 @@ class Dungeon
       panic_attack
     when :far_room
       monster_battle
-    when :treasure_room
+    when :shiny_room
       riddle
     end
   end
@@ -136,9 +144,9 @@ class Dungeon
   end
 
   def monster_battle
-    if @dead_monster
+    if @dead_dino
       gets
-      puts "\"Not sure there's much left to see in this room. I already got my souvenir.\""
+      puts "\"Not sure there's much left to see in this room. I already got my souvenir.\"\n\n"
     else
       gets
       puts "\"I can't really see much so far. I guess I'll have a look around.\""
@@ -170,7 +178,7 @@ class Dungeon
         while true
           gets
           puts "\nWhat attack would you like to use?"
-          attack = gets.chomp
+          attack = gets.chomp.downcase
           unless ["k", "p", "s"].include?(attack)
             puts "\nI'm afraid your hero doesn't know that particular move!"
             gets
@@ -183,7 +191,7 @@ class Dungeon
         case attack
         when "k"
           puts "\nYou level a hearty kick at the foul creature!"
-          @damage_to_dino = rand(12..25)
+          @damage_to_dino = rand(12..23)
         when "p"
           puts "\nYou give the dino a good punch to the noggin!"
           @damage_to_dino = rand(8..18)
@@ -200,9 +208,9 @@ class Dungeon
           gets
           puts "\nHoorah! You have vanquished the beast! Well done."
           gets
-          puts "Your hero plucks out one of the beast's horns as a momento of his great victory."
+          puts "Your hero plucks out one of the monster's horns as a momento of his great victory."
           gets
-          puts "Let us press on. To treasure! And glory!\n"
+          puts "Let us press on. To treasure! And glory!\n\n"
           @dead_dino = true
           break
         end
@@ -231,7 +239,55 @@ class Dungeon
   end
 
   def riddle
-    #TODO: Implement riddle.
+    gets
+    puts "But wait. It appears we'll have to solve a puzzle before we can get to the treasure."
+    gets
+    puts "You see before you 3 cups."
+    gets
+    puts "One is of pure crystal."
+    gets
+    puts "Another is of plain wood."
+    gets
+    puts "The third is made of ornate gold inset with various gems."
+    gets
+    puts "The inscription below says you must choose one of them. But we must choose wisely."
+    gets
+    while true
+      puts "\nWhich cup should your hero select? Crystal, wood or gold?"
+      answer = gets.chomp.downcase
+
+      unless ["crystal", "wood", "gold"].include?(answer)
+        puts "I'm afraid your hero didn't quite understand that."
+      else
+        break
+      end
+    end
+
+    if answer == "wood"
+      puts "\nAbove, a voice says, \"You have chosen well. You may proceed to your reward.\""
+      gets
+      puts "My goodness! You've done it!"
+      gets
+      puts "You have traversed the trails and trials before you and have found a great treasure!"
+      gets
+      puts "Use your newfound wealth for good my friend. Go buy a sportscar or something."
+      game_over
+    else
+      puts "A booming, unseen voice cries out, \"You have failed the test! You are unworthy. You must be destroyed!\""
+      gets
+      puts "In an instant, magma pours in from the ceiling and doors."
+      gets
+      puts "Your hero frantically searches for a means of escape but sees nothing."
+      gets
+      puts "This looks like... the end."
+      gets
+      puts "..."
+      gets
+      puts "Your hero is dead."
+      gets
+      puts "May I recommend watching a little more Indiana Jones. Would probably help a bit."
+      game_over
+    end
   end
 
   def open_treasure_room
@@ -243,7 +299,7 @@ class Dungeon
     puts "\"I guess I'll find out... Or maybe I don't want to.\""
     gets
     puts "Slightly shaken, your hero presses on."
-    add_room(:shiny_room, "Shiny Room", "Hoorah! We found the treasure!", { east: :hallway })
+    add_room(:shiny_room, "Shiny Room", "Hoorah! We found it. The treasure is ours!", { east: :hallway })
     @rooms[:hallway].connections[:west] = :shiny_room
   end
 
@@ -322,14 +378,6 @@ class Dungeon
 end
 
 dark_dungeon = Dungeon.new
-
-#Create rooms.
-dark_dungeon.add_room(:large_cave, "Large Cave", "You find yourself in a large cavernous room.", { east: :small_cave, west: :dragons_den, north: :hallway })
-dark_dungeon.add_room(:small_cave, "Small Cave", "It appears to be a rather small cave.", { west: :large_cave })
-dark_dungeon.add_room(:dragons_den, "Dragon's Den", "Hmmmm... It smells strongly of rotting meat in here. Well, it's nothing to be worried about I'm sure.", { east: :large_cave })
-dark_dungeon.add_room(:hallway, "Long Hallway", "I don't really see anything. I wonder where this leads.", { east: :far_room, south: :large_cave })
-dark_dungeon.add_room(:far_room, "Far Room", "It's kind of dark in here.", { west: :hallway })
-
 dark_dungeon.start
 dark_dungeon.play
 
