@@ -1,4 +1,4 @@
-#Allows the user to advance to the next piece of text using the enter key.
+# Allows the user to advance to the next piece of text using the enter key.
 def gets_puts(text)
   gets
   puts text
@@ -283,7 +283,6 @@ class Dungeon
     puts "                                       ''./_._._-' "
   end
 
-
   class Player
     attr_accessor :name, :location
 
@@ -291,7 +290,6 @@ class Dungeon
       @name = name
     end
   end
-
 
   class Room
     attr_accessor :reference, :name, :description, :connections
@@ -305,21 +303,12 @@ class Dungeon
 
     def display_connections
       @connections.each_pair do |direction, connection|
-        gets_puts "You look to the #{direction.to_s} and see a #{connection.to_s}."
+        gets_puts "You look to the #{direction} and see a #{connection}."
       end
     end
   end
-
 end
 
 dark_dungeon = Dungeon.new
 dark_dungeon.start
 dark_dungeon.play
-
-
-
-
-
-
-
-
