@@ -69,7 +69,6 @@ class Dungeon
   def show_current_description
     gets_puts "\n"
     puts find_room_in_dungeon(@player.location).description
-    puts "----------------------------------------------------"
   end
 
   def find_room_in_dungeon(reference)
