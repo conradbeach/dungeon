@@ -1,12 +1,14 @@
-# Allows the user to advance to the next piece of text using the enter key.
-def gets_puts(text)
-  gets
-  puts text
-end
+require "input_helpers"
+require "monsters"
+require "player"
+require "room"
 
 class Dungeon
   attr_accessor :player
   attr_reader :moves
+
+  include InputHelpers
+  include Monsters
 
   def initialize
     @rooms = {}
@@ -40,7 +42,7 @@ class Dungeon
   end
 
   def play
-    while true
+    loop
       if @moves == 7
         open_treasure_room
       end
@@ -48,8 +50,8 @@ class Dungeon
       event(@player.location)
       display_options
       while true
-        gets_puts "\nWhich direction would you like to go?"
-        choice = gets.chomp.downcase.to_sym
+        choice = get_input("\nWhich direction would you like to go?")
+        p choice
         unless find_room_in_dungeon(@player.location).connections.keys.include?(choice)
           puts "That's not really an option right now. Best try something else!\n"
         else
@@ -243,68 +245,6 @@ class Dungeon
     gets_puts "\n\n********************************************************************"
     puts "Thanks for adventuring with us today. Come back and play again sometime!\n\n"
     exit
-  end
-
-  def draw_dino
-    gets_puts "                                 .       . "
-    puts "                                / `.   .' \ "
-    puts "                        .---.  <    > <    >  .---. "
-    puts "                        |    \  \ - ~ ~ - /  /    | "
-    puts "                         ~-..-~             ~-..-~ "
-    puts "                     \~~~\.'                    `./~~~/ "
-    puts "           .-~~^-.    \__/                        \__/ "
-    puts "         .'  O    \     /               /       \  \ "
-    puts "        (_____,    `._.'               |         }  \/~~~/ "
-    puts "         `----.          /       }     |        /    \__/ "
-    puts "               `-.      |       /      |       /      `. ,~~| "
-    puts "                   ~-.__|      /_ - ~ ^|      /- _      `..-'   f: f: "
-    puts "                        |     /        |     /     ~-.     `-. _||_||_ "
-    puts "                        |_____|        |_____|         ~ - . _ _ _ _ _> "
-  end
-
-  def draw_dragon
-    gets_puts "                       .     _///_, "
-    puts "                     .      / ` ' '> "
-    puts "                       )   o'  __/_'> "
-    puts "                      (   /  _/  )_\'> "
-    puts "                       ' '__/   /_/\_> "
-    puts "                           ____/_/_/_/ "
-    puts "                          /,---, _/ / "
-    puts "                         ''  /_/_/_/ "
-    puts "                            /_(_(_(_ "
-    puts "                           (   \_\_\\_               )\ "
-    puts "                            \'__\_\_\_\__            ).\ "
-    puts "                            //____|___\__)           )_/ "
-    puts "                            |  _  \'___'_(           /' "
-    puts "                             \_ (-'\'___'_\      __,'_' "
-    puts "                             __) \  \\___(_   __/.__,' "
-    puts "                          ,((,-,__\  '', __\_/. __,' "
-    puts "                                       ''./_._._-' "
-  end
-
-  class Player
-    attr_accessor :name, :location
-
-    def initialize(name)
-      @name = name
-    end
-  end
-
-  class Room
-    attr_accessor :reference, :name, :description, :connections
-
-    def initialize(reference, name, description, connections)
-      @reference = reference
-      @name = name
-      @description = description
-      @connections = connections
-    end
-
-    def display_connections
-      @connections.each_pair do |direction, connection|
-        gets_puts "You look to the #{direction} and see a #{connection}."
-      end
-    end
   end
 end
 

@@ -1,0 +1,14 @@
+- [ ] Show clearly when input is expected as opposed to moving through text. Some
+  sort of propt character like "=> ".
+- [ ] Fix typo of "hp".
+- [ ] Make it clear what you should enter to move through a room.
+- [ ] Remove the question mark at the end of the line that lists the locations you
+  can move to.
+- [ ] If input is required and they don't enter anything, just ask for input again
+  without printing any text or moving on. Right now I treat an empty response as
+  an incorrect response.
+- [ ] Fix the names of the rooms so they're titleized instead of snake_cased.
+- [ ] Don't show negative numbers for HP in the battle.
+- [ ] Don't say "dropped to..." for the monster's HP unless the HP actually dropped.
+- [ ] Remove the "------------------------" lines; I don't think they make much
+  sense.
